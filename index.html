@@ -167,7 +167,7 @@
 
           alert("Added");
           createStudent(formData, function () {
-            // getStudent(renderStudent); //Này hiện tại có hoặc không cũng được
+            getStudent(renderStudent); //Này hiện tại có hoặc không cũng được
           });
         };
       }
@@ -186,7 +186,7 @@
           })
           .then(function () {
             //cái này sẽ call lại api
-            //getStudent(renderStudent);
+            getStudent(renderStudent);
             // var studentItem = document.querySelector('.student-item-'+id);
             // if(studentItem) {
             //   studentItem.remove();
