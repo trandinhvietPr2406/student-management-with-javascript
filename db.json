@@ -1,0 +1,28 @@
+{
+  "students": [
+    {
+      "id": 1,
+      "name": "Trần Đình Việt",
+      "dOfb": "24/06/2001",
+      "address": "Vinh hưng, Phú Lộc, Thừa Thiên Huế",
+      "class": "K25TPM2",
+      "date-join": "11/07/2023"
+    },
+    {
+      "name": "Trần Đình Khôi",
+      "dOfb": "12/09/1998",
+      "address": "Vinh hưng, Phú Lộc, Thừa Thiên Huế",
+      "class": "K25TPM2",
+      "date-join": "11/07/2023",
+      "id": 2
+    },
+    {
+      "name": "Trần Quốc Toản",
+      "dOfb": "11/02/2001",
+      "address": "Vinh Hải, Huế",
+      "class": "CL+NL-01",
+      "date-join": "12/02/2023",
+      "id": 3
+    }
+  ]
+}

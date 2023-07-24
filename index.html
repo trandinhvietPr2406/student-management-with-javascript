@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        min-height: 850px;
+      }
+
+      #create {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        padding: 6px;
+        width: 300px;
+        height: 172px;
+        background-color: beige;
+      }
+
+      input {
+        position: absolute;
+        outline: none;
+        width: 200px;
+        right: 20px;
+      }
+
+      #create-btn {
+        border-radius: 20px;
+        background-color: orange;
+        border: none;
+        height: 35px;
+        width: 70px;
+      }
+
+      #create-btn:hover {
+        cursor: pointer;
+        background-color: red;
+        color: white;
+      }
+
+      #manager-student {
+        margin-bottom: 200px;
+      }
+
+      div {
+        line-height: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 style="text-align: center">QUẢN LÝ SINH VIÊN</h1>
+
+    <div id="manager-student">
+      <h2>Quản lý sinh viên:</h2>
+      <ol id="student-list"></ol>
+      <p class="sumStudent"></p>
+    </div>
+    <!-- Dùng để bắt margin-bottom từ thẻ div "manager-student" -->
+    <br />
+
+    <div id="create">
+      <div>
+        <label>Name:</label>
+        <input type="text" name="name" placeholder="Nhập name" />
+      </div>
+      <br />
+      <div>
+        <label>Birthday:</label>
+        <input type="text" name="dOfb" placeholder="Nhập ngày sinh" />
+      </div>
+      <br />
+      <div>
+        <label>Address:</label>
+        <input type="text" name="address" placeholder="Nhập Address" />
+      </div>
+      <br />
+      <div>
+        <label>Class:</label>
+        <input type="text" name="class" placeholder="Nhập Class" />
+      </div>
+      <br />
+      <div>
+        <label>Ngày vào:</label>
+        <input type="text" name="date-join" placeholder="Nhập ngày vào" />
+      </div>
+      <br />
+      <div>
+        <button id="create-btn">Thêm</button>
+      </div>
+    </div>
+
+    <script>
+      var studentBlock = document.getElementById("student-list");
+      var urlApiStudent = "http://localhost:3000/students";
+
+      function start() {
+        getStudent(renderStudent);
+        getStudent(sumStudent);
+        handleCreateForm();
+      }
+
+      start();
+
+      //function
+
+      function renderStudent(students) {
+        var htmls = students.map(function (student) {
+          return `
+          <li class='student-item-${student.id}'> 
+            <p>Name: ${student.name}</p>
+            <p>Birthday: ${student.dOfb}</p>
+            <p>Address: ${student.address}</p>
+            <p>Class: ${student.class}</p>
+            <p>Date-join: ${student["date-join"]}</p>
+            <button onclick="handleDelete(${student.id})">Xoá</button>
+            <button onclick="handleUpdate(${student.id})">Sửa</button>
+          </li>
+        `;
+        });
+        studentBlock.innerHTML = htmls.join("");
+      }
+
+      function getStudent(callback) {
+        fetch(urlApiStudent)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(callback);
+      }
+
+      function createStudent(data) {
+        //data như là name, class, address
+        var option = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        };
+        fetch(urlApiStudent, option)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(callback);
+      }
+
+      function handleCreateForm() {
+        var createBtn = document.getElementById("create-btn");
+
+        createBtn.onclick = function () {
+          var name = document.querySelector('input[name="name"]').value;
+          var dOfb = document.querySelector('input[name="dOfb"]').value;
+          var address = document.querySelector('input[name="address"]').value;
+          var classs = document.querySelector('input[name="class"]').value;
+          var datejoin = document.querySelector('input[name="date-join"]').value;
+
+          var formData = {
+            name: name,
+            dOfb: dOfb,
+            address: address,
+            class: classs,
+            "date-join": datejoin,
+          };
+
+          alert("Added");
+          createStudent(formData, function () {
+            // getStudent(renderStudent); //Này hiện tại có hoặc không cũng được
+          });
+        };
+      }
+
+      function handleDelete(id) {
+        //data như là name, class, address
+        var option = {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        fetch(urlApiStudent + "/" + id, option)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function () {
+            //cái này sẽ call lại api
+            //getStudent(renderStudent);
+            // var studentItem = document.querySelector('.student-item-'+id);
+            // if(studentItem) {
+            //   studentItem.remove();
+            // }
+            alert("Removed");
+          });
+      }
+
+      function handleUpdate() {
+        //todo something
+      }
+
+      function sumStudent(students) {
+        var sumBlock = document.querySelector(".sumStudent");
+        var sum = students.reduce((total, current) => {
+          return total + 1;
+        }, 0);
+        sumBlock.innerHTML =
+          "Tổng số sinh viên: " + sum.toString() + " người!".toUpperCase();
+      }
+    </script>
+  </body>
+</html>
